@@ -7,7 +7,7 @@ Melodica is a console-based audio player built with Go. It supports playback of 
 
 ## Screenshot
 
-<img width="1505" alt="image" src="https://github.com/user-attachments/assets/d6e6e43b-73ad-4cab-a998-d6e8855a3f4a">
+<img width="1829" alt="image" src="https://github.com/user-attachments/assets/77c12fa6-4d3b-4f5b-8617-bdb1b9e0a7e2">
 
 ## Features
 
@@ -25,7 +25,24 @@ Melodica is a console-based audio player built with Go. It supports playback of 
 
 ## Installation
 
-To install Melodica, ensure you have Go installed (version 1.20 or later). You can install the latest version of Melodica directly from the GitHub repository using the following command:
+### Homebrew (macOS)
+
+To install Melodica on macOS via Homebrew, use the following commands:
+
+1. Tap the repository:
+
+   ```bash
+   brew tap zombocoder/melodica
+   ```
+
+2. Install Melodica:
+   ```bash
+   brew install melodica
+   ```
+
+### Go Installation
+
+If you prefer to install Melodica via Go, ensure you have Go installed (version 1.20 or later), then run:
 
 ```bash
 go install github.com/zombocoder/melodica/cmd/melodica@latest
