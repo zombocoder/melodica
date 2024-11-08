@@ -1,0 +1,104 @@
+name: Build and Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build and Release - ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            ext: ""
+            name: melodica-linux-x86_64
+
+          - os: windows-latest
+            goos: windows
+            goarch: amd64
+            ext: ".exe"
+            name: melodica-windows-x86_64.exe
+
+          - os: macos-latest
+            goos: darwin
+            goarch: arm64
+            ext: ""
+            name: melodica-darwin-arm64
+            build_supported: false
+
+    runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install audio dependencies for Linux
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt update
+          sudo apt install -y libasound2-dev
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23.2"
+
+      # Separate build step for non-Windows OS
+      - name: Build binary (Non-Windows)
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir -p dist
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/${{ matrix.name }} ./cmd/melodica/main.go
+
+      # Separate build step for Windows
+      - name: Build binary (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir -p dist
+          go build -o dist/${{ matrix.name }} ./cmd/melodica/main.go
+        shell: pwsh
+
+      # Rename binary to "melodica" (without architecture)
+      - name: Rename binary
+        run: |
+          cd dist
+          mv "${{ matrix.name }}" "melodica${{ matrix.ext }}"
+
+      - name: Copy playlist file
+        run: |
+          cp playlist.txt dist/
+        shell: bash
+
+      # Create zip archive (Non-Windows)
+      - name: Create zip archive (Non-Windows)
+        if: matrix.os != 'windows-latest'
+        run: |
+          cd dist
+          zip "melodica-${{ matrix.os }}.zip" "melodica${{ matrix.ext }}" playlist.txt
+        shell: bash
+
+      # Create zip archive (Windows)
+      - name: Create zip archive (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          Compress-Archive -Path dist\melodica.exe, dist\playlist.txt -DestinationPath dist\melodica-windows.zip
+        shell: pwsh
+
+      - name: Upload zip archive to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/melodica-${{ matrix.os }}.zip
+            dist/melodica-windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
