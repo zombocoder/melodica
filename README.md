@@ -25,6 +25,21 @@ Melodica is a console-based audio player built with Go. It supports playback of 
 
 ## Installation
 
+### Homebrew (macOS)
+
+To install Melodica on macOS via Homebrew, use the following commands:
+
+1. Tap the repository:
+
+   ```bash
+   brew tap zombocoder/melodica
+   ```
+
+2. Install Melodica:
+   ```bash
+   brew install melodica
+   ```
+
 ### Go Installation
 
 If you prefer to install Melodica via Go, ensure you have Go installed (version 1.20 or later), then run:
