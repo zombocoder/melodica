@@ -2,6 +2,9 @@
 
 Melodica is a console-based audio player built with Go. It supports playback of MP3 files from a playlist and includes basic controls like play, stop, next, previous, volume control, and more. The application is designed to work across multiple operating systems, including Linux, macOS, and Windows.
 
+## Screenshot
+<img width="1510" alt="image" src="https://github.com/user-attachments/assets/ca0a9af5-0d9c-4819-a95b-515b6194948d">
+
 ## Features
 
 - **Cross-platform**: Supports Linux, macOS (including Apple Silicon), and Windows.
