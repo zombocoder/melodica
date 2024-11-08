@@ -1,5 +1,8 @@
 # Melodica
 
+![Build](https://github.com/zombocoder/melodica/actions/workflows/build.yml/badge.svg)
+![Release](https://github.com/zombocoder/melodica/actions/workflows/release.yml/badge.svg)
+
 Melodica is a console-based audio player built with Go. It supports playback of MP3 files from a playlist and includes basic controls like play, stop, next, previous, volume control, and more. The application is designed to work across multiple operating systems, including Linux, macOS, and Windows.
 
 ## Screenshot
