@@ -6,8 +6,8 @@
 Melodica is a console-based audio player built with Go. It supports playback of MP3 files from a playlist and includes basic controls like play, stop, next, previous, volume control, and more. The application is designed to work across multiple operating systems, including Linux, macOS, and Windows.
 
 ## Screenshot
-<img width="1505" alt="image" src="https://github.com/user-attachments/assets/d6e6e43b-73ad-4cab-a998-d6e8855a3f4a">
 
+<img width="1505" alt="image" src="https://github.com/user-attachments/assets/d6e6e43b-73ad-4cab-a998-d6e8855a3f4a">
 
 ## Features
 
@@ -28,7 +28,7 @@ Melodica is a console-based audio player built with Go. It supports playback of 
 To install Melodica, ensure you have Go installed (version 1.20 or later). You can install the latest version of Melodica directly from the GitHub repository using the following command:
 
 ```bash
-go install github.com/zombocoder/melodica@latest
+go install github.com/zombocoder/melodica/cmd/melodica@latest
 ```
 
 This command will download and install Melodica into your `$GOPATH/bin` directory.

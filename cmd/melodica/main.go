@@ -22,12 +22,15 @@ import (
 )
 
 // Initial volume level
-var volumeLevel float64 = 1.0 // Ranges from 0.0 (mute) to 2.0 (double volume)
-var paused bool               // Tracks if playback is paused
-var pausedMutex sync.Mutex    // Protects access to paused variable
-var currentPos int64          // Tracks the current position in the audio data
-var spacePressed bool         // Debounce flag for Space key
-
+var volumeLevel float64 = 1.0  // Ranges from 0.0 (mute) to 2.0 (double volume)
+var paused bool                // Tracks if playback is paused
+var pausedMutex sync.Mutex     // Protects access to paused variable
+var currentPos int64           // Tracks the current position in the audio data
+var spacePressed bool          // Debounce flag for Space key
+const SampleRate = 44100       // Sample rate for audio playback
+const ChannelNum = 2           // Number of channels (stereo),
+const BitDepthInBytes = 2      // 16-bit audio
+const BufferSizeInBytes = 4096 // Buffer size for audio playback
 // Function to play buffered audio data with support for pause and resume
 func playBufferedAudio(ctx context.Context, reader *bytes.Reader, otoCtx *oto.Context) error {
 	decoder, err := mp3.NewDecoder(reader)
@@ -116,6 +119,15 @@ func playTrack(app *tview.Application, playlist []string, otoCtx *oto.Context, p
 }
 
 func main() {
+	// Set up logging to a file
+	logFile, err := os.OpenFile("melodica.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("Failed to open log file: %v\n", err)
+		os.Exit(1)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+
 	// Check for playlist file argument
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: melodica <playlist.txt>")
@@ -132,7 +144,7 @@ func main() {
 	}
 
 	// Setup audio context
-	otoCtx, err := oto.NewContext(44100, 2, 2, 4096)
+	otoCtx, err := oto.NewContext(SampleRate, ChannelNum, BitDepthInBytes, BufferSizeInBytes)
 	if err != nil {
 		log.Fatalf("could not create audio context: %v", err)
 	}
@@ -156,7 +168,7 @@ func main() {
 	for i, url := range playlist {
 		filename := filepath.Base(url)
 		index := i // Capture the current index for each list item
-		playlistView.AddItem(filename, "", 0, func() {
+		playlistView.AddItem(fmt.Sprintf("[%d] %s", i+1, filename), "", 0, func() {
 			// Play selected track from the list
 			currentIndex = index
 			currentPos = 0 // Reset position when starting a new track
