@@ -1,7 +1,3 @@
-Here's the updated `README.md` with the addition of the `x` key for pause and resume functionality.
-
----
-
 # Melodica
 
 Melodica is a console-based audio player built with Go. It supports playback of MP3 files from a playlist and includes basic controls like play, stop, next, previous, volume control, and more. The application is designed to work across multiple operating systems, including Linux, macOS, and Windows.
